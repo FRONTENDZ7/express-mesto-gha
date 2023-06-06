@@ -1,4 +1,4 @@
-const userRouter = require("express").Router();
+const userRouter = require('express').Router();
 
 const {
   getUserList,
@@ -6,12 +6,12 @@ const {
   createUser,
   updateUserData,
   updateUserAvatar,
-} = require("../controllers/users");
+} = require('../controllers/users');
 
-userRouter.get("/", getUserList);
-userRouter.get("/:userId", getUserId);
-userRouter.post("/", createUser);
-userRouter.patch("/me", updateUserData);
-userRouter.patch("/me/avatar", updateUserAvatar);
+userRouter.get('/', getUserList);
+userRouter.get('/:userId', getUserId);
+userRouter.post('/', createUser);
+userRouter.patch('/me', updateUserData);
+userRouter.patch('/me/avatar', updateUserAvatar);
 
 module.exports = userRouter;
