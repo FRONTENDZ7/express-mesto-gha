@@ -1,31 +1,37 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { errors } = require('celebrate');
 
 const { PORT = 3000, BASE_PATH = 'localhost' } = process.env;
-const { ERROR_NOT_FOUND } = require('./utils/response-status');
+
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+
+const mainRouter = require('./routes/index');
 
 const app = express();
 
-const userRouter = require('./routes/users');
-const cardRouter = require('./routes/cards');
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
+const responseHandler = require('./middlewares/response-handler');
 
 const mongoDB = 'mongodb://127.0.0.1:27017/mestodb';
 mongoose.set('strictQuery', false);
 mongoose.connect(mongoDB);
 
 app.use(express.json());
+app.use(limiter);
+app.use(helmet());
 
-app.use((req, res, next) => {
-  req.user = { _id: '5d8b8592978f8bd833ca8133' };
-  next();
-});
-app.use('/cards', cardRouter);
-app.use('/users', userRouter);
+app.use(mainRouter);
 
-app.use('*', (req, res) => {
-  res.status(ERROR_NOT_FOUND).send({ message: 'Страница не найдена' });
-});
+app.use(errors());
+app.use(responseHandler);
 
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`Адрес сервера — http://${BASE_PATH}:${PORT}`);
 });
