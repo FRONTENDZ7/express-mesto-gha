@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     default:
-      'https://s3-eu-north-1.amazonaws.com/static.epitafii.ru/wp-content/uploads/2014/01/%D1%84%D0%BE%D1%82%D0%BE-%D0%96%D0%B0%D0%BA-%D0%98%D0%B2-%D0%9A%D1%83%D1%81%D1%82%D0%BE-1.jpg',
+      'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     minlength: 4,
     validate: {
       validator: (correct) => validator.isURL(correct),
